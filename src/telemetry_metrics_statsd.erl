@@ -247,9 +247,8 @@ terminate(_Reason, #state{handler_ids = HandlerIds}) ->
                         inet | inet6, pos_integer() | undefined) -> tms_udp:config().
 build_udp_config({local, _} = LocalHost, Port, _InetFam, _Interval) ->
     #{host => LocalHost, port => Port, inet_address_family => local};
-build_udp_config(Host, Port, InetFam, Interval) when is_tuple(Host) ->
-    %% Already an IP address tuple — no resolution needed
-    maybe_schedule_resolution(Interval),
+build_udp_config(Host, Port, InetFam, _Interval) when is_tuple(Host) ->
+    %% Already an IP address tuple — no DNS resolution needed or scheduled.
     #{host => Host, port => Port, inet_address_family => InetFam};
 build_udp_config(Host, Port, InetFam, Interval) ->
     %% Hostname string — resolve once at start
