@@ -1,0 +1,8 @@
+{application, telemetry_metrics_statsd_erlang, [
+    {description, "Telemetry.Metrics reporter for StatsD (Erlang port)"},
+    {vsn, "0.1.0"},
+    {modules, []},
+    {registered, []},
+    {applications, [kernel, stdlib, telemetry]},
+    {env, []}
+]}.
