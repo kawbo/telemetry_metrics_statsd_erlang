@@ -61,7 +61,16 @@
   | {inet_address_family,      inet | inet6}
   | {host_resolution_interval, pos_integer()}.
 
--export_type([option/0]).
+-type metric_option() ::
+    {event_name,       binary() | [atom()]}
+  | {measurement,      atom()}
+  | {tags,             [atom()]}
+  | {tag_values,       fun((map()) -> map())}
+  | {keep,             fun((map()) -> boolean())}
+  | {drop,             fun((map()) -> boolean())}
+  | {reporter_options, list()}.
+
+-export_type([option/0, metric_option/0]).
 
 -record(state, {
     pool_id                  :: ets:tid(),
@@ -79,31 +88,31 @@
 -spec counter(binary() | [atom()]) -> tms_metric:t().
 counter(Name) -> counter(Name, []).
 
--spec counter(binary() | [atom()], [option()]) -> tms_metric:t().
+-spec counter(binary() | [atom()], [metric_option()]) -> tms_metric:t().
 counter(Name, Opts) -> build_metric(counter, Name, Opts).
 
 -spec last_value(binary() | [atom()]) -> tms_metric:t().
 last_value(Name) -> last_value(Name, []).
 
--spec last_value(binary() | [atom()], [option()]) -> tms_metric:t().
+-spec last_value(binary() | [atom()], [metric_option()]) -> tms_metric:t().
 last_value(Name, Opts) -> build_metric(last_value, Name, Opts).
 
 -spec sum(binary() | [atom()]) -> tms_metric:t().
 sum(Name) -> sum(Name, []).
 
--spec sum(binary() | [atom()], [option()]) -> tms_metric:t().
+-spec sum(binary() | [atom()], [metric_option()]) -> tms_metric:t().
 sum(Name, Opts) -> build_metric(sum, Name, Opts).
 
 -spec summary(binary() | [atom()]) -> tms_metric:t().
 summary(Name) -> summary(Name, []).
 
--spec summary(binary() | [atom()], [option()]) -> tms_metric:t().
+-spec summary(binary() | [atom()], [metric_option()]) -> tms_metric:t().
 summary(Name, Opts) -> build_metric(summary, Name, Opts).
 
 -spec distribution(binary() | [atom()]) -> tms_metric:t().
 distribution(Name) -> distribution(Name, []).
 
--spec distribution(binary() | [atom()], [option()]) -> tms_metric:t().
+-spec distribution(binary() | [atom()], [metric_option()]) -> tms_metric:t().
 distribution(Name, Opts) -> build_metric(distribution, Name, Opts).
 
 %% ==================================================================
